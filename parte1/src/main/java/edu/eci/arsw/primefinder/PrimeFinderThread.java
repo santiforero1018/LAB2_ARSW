@@ -10,7 +10,6 @@ public class PrimeFinderThread extends Thread {
 	private List<Integer> primes = new LinkedList<Integer>();
 	private Object lock = new Object();
 	private Long startTime;
-	private boolean paused = false;
 
 	public PrimeFinderThread(String name, int a, int b) {
 		super(name);
@@ -24,7 +23,7 @@ public class PrimeFinderThread extends Thread {
 			this.startTime = System.currentTimeMillis();
 			long targetPauseTime = startTime + 5000;
 			synchronized (lock) {
-				for (int i = this.a; i <= this.b && (System.currentTimeMillis() < targetPauseTime) && !paused; i++) {
+				for (int i = this.a; i <= this.b && (System.currentTimeMillis() < targetPauseTime); i++) {
 					if (isPrime(i)) {
 						primes.add(i);
 						// System.out.println(this.getName()+":"+i);
@@ -35,8 +34,7 @@ public class PrimeFinderThread extends Thread {
 
 				if (System.currentTimeMillis() >= targetPauseTime) {
 					try {
-						this.pause();
-						System.out.println(this.getName() + ": " + this.getPrimes().size() + "current aa: " +a);
+						System.out.println(this.getName() + ": " + this.getPrimes().size() + " current a: " +a);
 						lock.wait();
 					} catch (InterruptedException e) {
 						e.printStackTrace();
@@ -66,20 +64,10 @@ public class PrimeFinderThread extends Thread {
 		return this.a >= this.b;
 	}
 
-	public void pause() {
-		paused = true;
-
-	}
-
 	public void running() {
 		synchronized (lock) {
-			paused = false;
 			lock.notify();
 		}
-	}
-
-	public boolean isPaused() {
-		return paused;
 	}
 
 }

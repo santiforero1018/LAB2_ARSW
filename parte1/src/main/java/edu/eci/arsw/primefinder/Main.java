@@ -23,16 +23,12 @@ public class Main {
 			pft2.running();
 			pft3.running();
 
-			if(pft1.verify() && pft2.verify() && pft3.verify()){
-				break;
+			if (pft1.verify() && pft2.verify() && pft3.verify()) {
+				System.out.println("Total primes of " + pft1.getName() + ": " + pft1.getPrimes().size());
+				System.out.println("Total primes of " + pft2.getName() + ": " + pft2.getPrimes().size());
+				System.out.println("Total primes of " + pft3.getName() + ": " + pft3.getPrimes().size());
+				System.exit(0);
 			}
-		}
-
-		if (pft1.verify() && pft2.verify() && pft3.verify()) {
-			System.out.println("Total primes of " + pft1.getName() + ": " + pft1.getPrimes().size());
-			System.out.println("Total primes of " + pft2.getName() + ": " + pft2.getPrimes().size());
-			System.out.println("Total primes of " + pft3.getName() + ": " + pft3.getPrimes().size());
-			System.exit(0);
 		}
 
 	}
