@@ -20,20 +20,17 @@ public class PrimeFinderThread extends Thread {
 
 	@Override
 	public void run() {
-		if (a > b){
-			return;
-		}
 		while (true) {
 			this.startTime = System.currentTimeMillis();
 			long targetPauseTime = startTime + 5000;
 			synchronized (lock) {
-				for (int i = a; i <= b && (System.currentTimeMillis() < targetPauseTime) && !paused; i++) {
+				for (int i = this.a; i <= this.b && (System.currentTimeMillis() < targetPauseTime) && !paused; i++) {
 					if (isPrime(i)) {
 						primes.add(i);
 						// System.out.println(this.getName()+":"+i);
 					}
 
-					a = i;
+					this.a = i;
 				}
 
 				if (System.currentTimeMillis() >= targetPauseTime) {
@@ -65,12 +62,16 @@ public class PrimeFinderThread extends Thread {
 		return primes;
 	}
 
+	public boolean verify(){
+		return this.a >= this.b;
+	}
+
 	public void pause() {
 		paused = true;
 
 	}
 
-	public synchronized void running() {
+	public void running() {
 		synchronized (lock) {
 			paused = false;
 			lock.notify();

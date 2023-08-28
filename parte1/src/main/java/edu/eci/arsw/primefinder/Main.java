@@ -15,9 +15,7 @@ public class Main {
 		pft2.start();
 		pft3.start();
 
-		while (pft1.isAlive() || pft2.isAlive() || pft3.isAlive()) {
-
-			System.out.println("Execution paused. Press ENTER to resume...");
+		while (true) {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			br.readLine();
 
@@ -25,6 +23,16 @@ public class Main {
 			pft2.running();
 			pft3.running();
 
+			if(pft1.verify() && pft2.verify() && pft3.verify()){
+				break;
+			}
+		}
+
+		if (pft1.verify() && pft2.verify() && pft3.verify()) {
+			System.out.println("Total primes of " + pft1.getName() + ": " + pft1.getPrimes().size());
+			System.out.println("Total primes of " + pft2.getName() + ": " + pft2.getPrimes().size());
+			System.out.println("Total primes of " + pft3.getName() + ": " + pft3.getPrimes().size());
+			System.exit(0);
 		}
 
 	}
