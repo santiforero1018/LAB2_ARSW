@@ -32,15 +32,13 @@ public class Galgo extends Thread {
 				if (ubicacion==1){
 					regl.setGanador(this.getName());
 				}
-				
 			}
 		}
 	}
 
 
 	@Override
-	public void run() {
-		
+	public void run(){
 		try {
 			corra();
 		} catch (InterruptedException e) {

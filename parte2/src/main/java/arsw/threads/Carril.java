@@ -86,7 +86,7 @@ public class Carril {
 	 * @param i
 	 */
 	public void setPasoOn(int i) {
-		paso[i].setText("o");
+		paso[i].setText("0");
 	}
 
 	/**
