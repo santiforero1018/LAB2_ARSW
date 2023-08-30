@@ -15,6 +15,8 @@ public class MainCanodromo {
 
     private static RegistroLlegada reg = new RegistroLlegada();
 
+    private static Object lock = new Object();
+
     public static void main(String[] args) {
         can = new Canodromo(17, 100);
         galgos = new Galgo[can.getNumCarriles()];
@@ -55,17 +57,9 @@ public class MainCanodromo {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Object lock = new Object();
                         iterar = false;
-                        synchronized (lock) {
-                            try {
-                                while (!iterar) {
-                                    lock.wait();
-                                }
-                            } catch (InterruptedException e1) {
-                                // TODO Auto-generated catch block
-                                e1.printStackTrace();
-                            }
+                        for (int i = 0; i < can.getNumCarriles(); i++) {
+                            galgos[i].setRunning(iterar);
                         }
                         System.out.println("Carrera pausada!");
                     }
@@ -76,11 +70,11 @@ public class MainCanodromo {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Object inLock = new Object();
                         iterar = true;
-                        synchronized (inLock) {
-                            inLock.notifyAll();
+                        synchronized(lock){
+                            galgos.notifyAll();
                         }
+                        
                         System.out.println("Carrera reanudada!");
                     }
                 });
