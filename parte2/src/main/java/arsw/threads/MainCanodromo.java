@@ -15,7 +15,6 @@ public class MainCanodromo {
 
     private static RegistroLlegada reg = new RegistroLlegada();
 
-    private static Object lock = new Object();
 
     public static void main(String[] args) {
         can = new Canodromo(17, 100);
@@ -43,9 +42,10 @@ public class MainCanodromo {
                                 }
                                 while (iterar) {
                                     if (!(galgos[galgos.length - 1].isAlive())) {
+                                        can.winnerDialog(reg.getGanador(), reg.getUltimaPosicionAlcanzada() - 1);
                                         System.out.println("El ganador fue:" + reg.getGanador());
                                         iterar = false;
-                                        can.winnerDialog(reg.getGanador(), reg.getUltimaPosicionAlcanzada() - 1);
+                                        
                                     }
                                 }
                             }
@@ -70,9 +70,11 @@ public class MainCanodromo {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        
                         iterar = true;
-                        synchronized(lock){
-                            galgos.notifyAll();
+                        synchronized(reg){
+                            for(Galgo galgo: galgos) galgo.setRunning(iterar);
+                            reg.notifyAll();
                         }
                         
                         System.out.println("Carrera reanudada!");
