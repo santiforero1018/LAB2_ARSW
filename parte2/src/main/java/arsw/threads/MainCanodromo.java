@@ -11,6 +11,8 @@ public class MainCanodromo {
 
     private static Canodromo can;
 
+    private static boolean iterar;
+
     private static RegistroLlegada reg = new RegistroLlegada();
 
     public static void main(String[] args) {
@@ -21,7 +23,6 @@ public class MainCanodromo {
         // Acción del botón start
         can.setStartAction(
                 new ActionListener() {
-
                     @Override
                     public void actionPerformed(final ActionEvent e) {
                         // como acción, se crea un nuevo hilo que cree los hilos
@@ -31,18 +32,18 @@ public class MainCanodromo {
                         ((JButton) e.getSource()).setEnabled(false);
                         new Thread() {
                             public void run() {
+                                iterar = true;
                                 for (int i = 0; i < can.getNumCarriles(); i++) {
                                     // crea los hilos 'galgos'
                                     galgos[i] = new Galgo(can.getCarril(i), "" + i, reg);
                                     // inicia los hilos
                                     galgos[i].start();
-
                                 }
-                                while(true){
-                                    if(!(galgos[galgos.length-1].isAlive())){
-                                        can.winnerDialog(reg.getGanador(), reg.getUltimaPosicionAlcanzada() - 1);
+                                while (iterar) {
+                                    if (!(galgos[galgos.length - 1].isAlive())) {
                                         System.out.println("El ganador fue:" + reg.getGanador());
-                                        break;
+                                        iterar = false;
+                                        can.winnerDialog(reg.getGanador(), reg.getUltimaPosicionAlcanzada() - 1);
                                     }
                                 }
                             }
@@ -54,14 +55,32 @@ public class MainCanodromo {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        Object lock = new Object();
+                        iterar = false;
+                        synchronized (lock) {
+                            try {
+                                while (!iterar) {
+                                    lock.wait();
+                                }
+                            } catch (InterruptedException e1) {
+                                // TODO Auto-generated catch block
+                                e1.printStackTrace();
+                            }
+                        }
                         System.out.println("Carrera pausada!");
                     }
+
                 });
 
         can.setContinueAction(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        Object inLock = new Object();
+                        iterar = true;
+                        synchronized (inLock) {
+                            inLock.notifyAll();
+                        }
                         System.out.println("Carrera reanudada!");
                     }
                 });
