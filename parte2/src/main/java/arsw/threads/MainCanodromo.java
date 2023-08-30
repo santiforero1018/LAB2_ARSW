@@ -15,7 +15,6 @@ public class MainCanodromo {
 
     private static RegistroLlegada reg = new RegistroLlegada();
 
-
     public static void main(String[] args) {
         can = new Canodromo(17, 100);
         galgos = new Galgo[can.getNumCarriles()];
@@ -40,15 +39,19 @@ public class MainCanodromo {
                                     // inicia los hilos
                                     galgos[i].start();
                                 }
+
                                 while (iterar) {
                                     if (!(galgos[galgos.length - 1].isAlive())) {
                                         can.winnerDialog(reg.getGanador(), reg.getUltimaPosicionAlcanzada() - 1);
                                         System.out.println("El ganador fue:" + reg.getGanador());
                                         iterar = false;
-                                        
+
                                     }
                                 }
+
                             }
+
+                            
                         }.start();
                     }
                 });
@@ -57,9 +60,9 @@ public class MainCanodromo {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        iterar = false;
+                        
                         for (int i = 0; i < can.getNumCarriles(); i++) {
-                            galgos[i].setRunning(iterar);
+                            galgos[i].setRunning(false);
                         }
                         System.out.println("Carrera pausada!");
                     }
@@ -70,13 +73,12 @@ public class MainCanodromo {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        
-                        iterar = true;
-                        synchronized(reg){
-                            for(Galgo galgo: galgos) galgo.setRunning(iterar);
+                        for (Galgo galgo : galgos)
+                                galgo.setRunning(true);
+                        synchronized (reg) { 
                             reg.notifyAll();
                         }
-                        
+
                         System.out.println("Carrera reanudada!");
                     }
                 });

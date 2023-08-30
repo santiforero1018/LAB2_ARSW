@@ -12,6 +12,12 @@ public class Galgo extends Thread {
 	RegistroLlegada regl;
 	private boolean running;
 
+	/*
+	//  * Constructor de la clase Galgo
+	 * @param carril
+	 * @param name
+	 * @param reg
+	 */
 	public Galgo(Carril carril, String name, RegistroLlegada reg) {
 		super(name);
 		this.carril = carril;
@@ -20,8 +26,11 @@ public class Galgo extends Thread {
 		this.regl = reg;
 	}
 
+	// Pone a correr al galgo
 	public void corra() throws InterruptedException {
+
 		while (paso < carril.size()) {
+
 			Thread.sleep(100);
 			synchronized (regl) {
 				carril.setPasoOn(paso++);
@@ -29,26 +38,26 @@ public class Galgo extends Thread {
 
 			carril.displayPasos(paso);
 
-			if (!running) {
-				this.stopGalgo();
-			}
-
 			if (paso == carril.size()) {
 				carril.finish();
 				int ubicacion = regl.getUltimaPosicionAlcanzada();
 				regl.setUltimaPosicionAlcanzada(ubicacion + 1);
 				System.out.println("El galgo " + this.getName() + " llego en la posicion " + ubicacion);
-				
+
 				if (ubicacion == 1) {
-					synchronized(regl){
-						regl.setGanador(this.getName());
-					}
+					regl.setGanador(this.getName());
 				}
+			}
+
+			// valida si la bandera running es true o false, si es false, ejecuta el metodo stopGalgo
+			if (!running) {
+				this.stopGalgo();
 			}
 		}
 
 	}
 
+	// realiza una acción de espera sobre el hilo correspondiente al Galgo
 	public void stopGalgo() throws InterruptedException {
 		synchronized (regl) {
 			try {
@@ -60,6 +69,10 @@ public class Galgo extends Thread {
 
 	}
 
+	/*
+	 * Cambiar el estado del galgo (corriendo o detenido)
+	 * @param stop
+	*/
 	public void setRunning(boolean stop) {
 		this.running = stop;
 	}
