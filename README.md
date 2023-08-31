@@ -58,7 +58,7 @@ Taller.
 
     - Interpretando el codigo y lo que tiene que pasar, encontramos que la region critica se encuentra en la siguiente porcion de codigo:
       ![image](https://github.com/santiforero1018/LAB2_ARSW/assets/88952698/c9d02c88-fab0-41e2-90e8-0e3e4719b4e7)
-      Aqui se sincroniza el paso que da el Galgo, por lo que no se tendra el problema cada vez que se valide quien sera el ganador, pues al ejecutarse esta             porción de codigo, los threads tendran que esperar que el de adelante ejecute, para ellos poder ejecutar y dar el paso.
+    - Aqui se sincroniza el paso que da el Galgo, por lo que no se tendra el problema cada vez que se valide quien sera el ganador, pues al ejecutarse esta             porción de codigo, los threads tendran que esperar que el de adelante ejecute, para ellos poder ejecutar y dar el paso.
 
 4.  Utilice un mecanismo de sincronización para garantizar que a dichas
     regiones críticas sólo acceda un hilo a la vez. Verifique los
